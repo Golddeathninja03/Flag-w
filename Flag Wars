@@ -1,0 +1,1235 @@
+
+--[[
+  ____  ____     ____    ___       _           ----                  
+ / ___|/ ___|   / ___|  / _ \     / \         |  _ \ 
+| |  _ \___ \  | |  _  | | | |   | | |        | | | |
+| |_| |___) |  | |_| | | |_| |   | | |        | | | |
+ \____|____/    \____|  \___/    | | |___     | | | |
+                                 |_|_____|    |____/ 
+ 
+         
+
+]]
+
+
+
+
+local Mercury = loadstring(game:HttpGet("https://raw.githubusercontent.com/deeeity/mercury-lib/master/src.lua"))()
+local GUI = Mercury:Create{
+    Name = "Flag Wars God",
+    Size = UDim2.fromOffset(600, 400),
+    Theme = Mercury.Themes.Bright,
+    Link = "https://github.com/deeeity/mercury-lib"
+}
+
+
+local Tab = GUI:Tab{
+	Name = "Customization",
+	Icon = "rbxassetid://8569322835"
+}
+
+Tab:ColorPicker{
+	Style = Mercury.ColorPickerStyles.Legacy,
+	Callback = function(color) end
+}
+
+Tab:Keybind{
+	Name = "Keybind",
+	Keybind = nil,
+	Description = nil
+}
+
+
+local Tab = GUI:Tab{
+	Name = "Visual",
+	Icon = "rbxassetid://8569322835"
+}
+
+Tab:Button{
+	Name = "FOV MAX",
+	Description = "MAX FOV",
+	Callback = function() local amount = 0
+
+        game:GetService'Players'.LocalPlayer.Camera.MinZoomDistance = amount
+    end
+}
+
+
+Tab:Button{
+	Name = "Yacht Drop Esp",
+	Description = "Esp-For-Yacht-Drop",
+	Callback = function() 
+        local function HighlightPart(part)
+            local highlightGui = Instance.new("BillboardGui")
+            highlightGui.Size = UDim2.new(1, 0, 1, 0)
+            highlightGui.Adornee = part
+            highlightGui.AlwaysOnTop = true
+            highlightGui.Parent = part
+        
+            local highlightFrame = Instance.new("Frame")
+            highlightFrame.Size = UDim2.new(1, 0, 1, 0)
+            highlightFrame.BackgroundTransparency = 0.5
+            highlightFrame.BackgroundColor3 = Color3.new(1, 1, 0) -- Yellow color
+            highlightFrame.Parent = highlightGui
+        end
+        
+        for _, part in pairs(game.Workspace:GetDescendants()) do
+            if part:IsA("Part") and part.Parent.Name == "Stranded Yacht" then
+                HighlightPart(part)
+            end
+        end
+        
+        game.Workspace.DescendantAdded:Connect(function(v)
+            if v:IsA("Part") and v.Parent.Name == "Stranded Yacht" then
+                HighlightPart(v)
+            end
+        end)
+        
+	end
+}
+
+
+
+
+Tab:Button{
+	Name = "NameTag ESP",
+	Description = "1st Esp for all players",
+	Callback = function()
+        local esp_settings = { ---- table for esp settings 
+    textsize = 8,
+    colour = 255,255,255
+}
+ 
+local gui = Instance.new("BillboardGui")
+local esp = Instance.new("TextLabel",gui) ---- new instances to make the billboard gui and the textlabel
+ 
+ 
+ 
+gui.Name = "esp"; ---- properties of the esp
+gui.ResetOnSpawn = false
+gui.AlwaysOnTop = true;
+gui.LightInfluence = 0;
+gui.Size = UDim2.new(1.75, 0, 1.75, 0);
+esp.BackgroundColor3 = Color3.fromRGB(255, 255, 255);
+esp.Text = ""
+esp.Size = UDim2.new(0.0001, 0.00001, 0.0001, 0.00001);
+esp.BorderSizePixel = 4;
+esp.BorderColor3 = Color3.new(esp_settings.colour)
+esp.BorderSizePixel = 0
+esp.Font = "GothamSemibold"
+esp.TextSize = esp_settings.textsize
+esp.TextColor3 = Color3.fromRGB(esp_settings.colour) -- text colour
+ 
+game:GetService("RunService").RenderStepped:Connect(function() ---- loops faster than a while loop :)
+    for i,v in pairs (game:GetService("Players"):GetPlayers()) do
+        if v ~= game:GetService("Players").LocalPlayer and v.Character.Head:FindFirstChild("Cracked esp")==nil  then -- craeting checks for team check, local player etc
+            esp.Text = "{"..v.Name.."}"
+            gui:Clone().Parent = v.Character.Head
+    end
+end
+end)
+    end
+}
+Tab:Button{
+	Name = " Players Esp 1",
+	Description = "1st Esp for all players",
+	Callback = function()
+        local currPlayer = game:GetService("Players").LocalPlayer
+    local servPlayer = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local teams = game:GetService("Teams")
+    
+    
+    local function numberRound(n)
+        return math.floor(tonumber(n) + 0.5)
+    end
+    
+    function isSameTeam(player)
+        if player.team ~= currPlayer.team and player.team ~= teams["Neutral"] then
+            return false
+        else
+            return true
+        end
+    end
+    
+    function isDead(player)
+        if
+            player == nil or player.Character == nil or player.Character:FindFirstChildWhichIsA("Humanoid") == nil or
+                player.Character.Humanoid.Health <= 0
+         then
+            return true
+        else
+            return false
+        end
+    end
+    
+    function getEquippedWeapon(player)
+        local char = player.Character
+        local weapon = char and char:FindFirstChildWhichIsA("Tool")
+    
+        if weapon ~= nil then
+            return weapon.Name
+        else
+            return "Holstered"
+        end
+    end
+    
+    function doESP()
+        for _, v in next, servPlayer:GetPlayers() do
+            if v ~= currPlayer and not isSameTeam(v) and not isDead(v) then
+                for _, k in next, v.Character:GetChildren() do
+                    if not isSameTeam(v) and not isDead(v) and k:IsA("BasePart") and not k:FindFirstChild("dohmESP") then
+                        local dohmESP = Instance.new("BoxHandleAdornment", k)
+                        dohmESP.Name = "dohmESP"
+                        dohmESP.AlwaysOnTop = true
+                        dohmESP.ZIndex = 10
+                        dohmESP.Size = k.Size
+                        dohmESP.Adornee = k
+                        dohmESP.Transparency = 0.7
+                        dohmESP.Color3 = Color3.new(1, 0, 0)
+                    end
+                    if not isDead(v) and not v.Character.Head:FindFirstChild("dohmESPTag") then
+                        local dohmESPTag = Instance.new("BillboardGui", v.Character.Head)
+                        dohmESPTag.Name = "dohmESPTag"
+                        dohmESPTag.Size = UDim2.new(1, 200, 1, 30)
+                        dohmESPTag.Adornee = v.Character.Head
+                        dohmESPTag.AlwaysOnTop = true
+    
+                        local topTag = Instance.new("TextLabel", dohmESPTag)
+                        topTag.TextWrapped = true
+                        topTag.Text =
+                            (v.Name ..
+                            " | " ..
+                                numberRound((currPlayer.Character.Head.Position - v.Character.Head.Position).Magnitude / 3) ..
+                                    "m" .. " | " .. getEquippedWeapon(v))
+                        topTag.Size = UDim2.new(1, 0, 1, 0)
+                        topTag.TextYAlignment = "Top"
+                        topTag.TextColor3 = Color3.new(1, 1, 1)
+                        topTag.BackgroundTransparency = 1
+                    else
+                        v.Character.Head.dohmESPTag.TextLabel.Text =
+                            (v.Name ..
+                            " | " ..
+                                numberRound((currPlayer.Character.Head.Position - v.Character.Head.Position).Magnitude / 3) ..
+                                    "m" .. " | " .. getEquippedWeapon(v))
+                    end
+                end
+            end
+        end
+    end
+    
+    RunService.Stepped:Connect(function()
+    doESP()
+    end
+)
+    end
+}
+
+Tab:Button{
+	Name = "Players Esp 2",
+	Description = "2nd Esp for all players",
+	Callback = function() 
+        local client = game.Players.LocalPlayer
+        local players = game:GetService("Players")
+        local rs = game:GetService("RunService")
+        
+        local function clonePart(part, model, character)
+           if part:IsA("BasePart") then
+        local head = character:WaitForChild("Head")
+        local clone = part:Clone()
+        for i, v in ipairs(clone:GetChildren()) do
+        if not v:IsA("SpecialMesh") then
+        v:Destroy()
+        continue
+        end
+        v.TextureId = ""
+        end
+        clone.Color = Color3.fromRGB(0, 255, 0)
+        pcall(function()clone.Size = clone.Size * 0.7 clone.CanCollide = false end)
+        clone.Parent = model
+        rs.RenderStepped:connect(function()
+        if head:IsDescendantOf(workspace) then
+        clone.CFrame = part.CFrame
+        clone.Size = part.Size
+        else
+        model:Destroy()
+        return
+        end
+        end)
+        end
+        end
+        local function chams(character)
+           local model = Instance.new("Model")
+           model.Name = character.Name
+           model.Parent = workspace
+           local cham = Instance.new("Highlight",model)
+           cham.Name = "cham"
+           cham.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop  
+           cham.OutlineColor = Color3.fromRGB(0,0,0)
+           cham.FillColor = Color3.fromRGB(255,0,0)
+           cham.FillTransparency = 0
+           cham.OutlineTransparency = 1
+           local new = cham:Clone()
+           new.Parent = character
+           new.FillColor = Color3.fromRGB(0,255,0)
+           new.DepthMode = Enum.HighlightDepthMode.Occluded  
+           for i,v in ipairs(character:GetChildren()) do
+        -- if character has a head then
+               if character:FindFirstChild("Head") then
+                   clonePart(v, model, character)
+               end
+           end
+        end
+        for i,v in ipairs(players:GetPlayers()) do
+           if v~= client then
+               if v.Character then
+                   chams(v.Character)
+               end
+           end
+           v.CharacterAdded:connect(function()wait(0.1)chams(v.Character)end)
+        end
+        players.PlayerAdded:connect(function()
+           if v~= client then
+               if v.Character then
+                   chams(v.Character)
+               end
+           end
+           v.CharacterAdded:connect(function()wait(0.1)chams(v.Character)end)
+        end)
+    end
+}
+
+Tab:Button{
+	Name = "Players Esp 3",
+	Description = "3rd Esp for all players",
+	Callback = function() 
+        getgenv().enabled = true --Toggle on/off
+        getgenv().filluseteamcolor = true --Toggle fill color using player team color on/off
+        getgenv().outlineuseteamcolor = true --Toggle outline color using player team color on/off
+        getgenv().fillcolor = Color3.new(0, 0, 0) --Change fill color, no need to edit if using team color
+        getgenv().outlinecolor = Color3.new(1, 1, 1) --Change outline color, no need to edit if using team color
+        getgenv().filltrans = 0 --Change fill transparency
+        getgenv().outlinetrans = 0 --Change outline transparency
+        
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/zntly/highlight-esp/main/esp.lua"))()
+    end
+}
+
+
+Tab:Button{
+	Name = "CHOPS ESP",
+	Description = "THE BEST",
+	Callback = function() 
+        local currPlayer = game:GetService("Players").LocalPlayer
+        local servPlayer = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+        local teams = game:GetService("Teams")
+        
+        
+        local function numberRound(n)
+            return math.floor(tonumber(n) + 0.5)
+        end
+        
+        function isSameTeam(player)
+            if player.team ~= currPlayer.team and player.team ~= teams["Neutral"] then
+                return false
+            else
+                return true
+            end
+        end
+        
+        function isDead(player)
+            if
+                player == nil or player.Character == nil or player.Character:FindFirstChildWhichIsA("Humanoid") == nil or
+                    player.Character.Humanoid.Health <= 0
+             then
+                return true
+            else
+                return false
+            end
+        end
+        
+        function getEquippedWeapon(player)
+            local char = player.Character
+            local weapon = char and char:FindFirstChildWhichIsA("Tool")
+        
+            if weapon ~= nil then
+                return weapon.Name
+            else
+                return "Holstered"
+            end
+        end
+        
+        function doESP()
+            for _, v in next, servPlayer:GetPlayers() do
+                if v ~= currPlayer and not isSameTeam(v) and not isDead(v) then
+                    for _, k in next, v.Character:GetChildren() do
+                        if not isSameTeam(v) and not isDead(v) and k:IsA("BasePart") and not k:FindFirstChild("dohmESP") then
+                            local dohmESP = Instance.new("BoxHandleAdornment", k)
+                            dohmESP.Name = "dohmESP"
+                            dohmESP.AlwaysOnTop = true
+                            dohmESP.ZIndex = 10
+                            dohmESP.Size = k.Size
+                            dohmESP.Adornee = k
+                            dohmESP.Transparency = 0.7
+                            dohmESP.Color3 = Color3.new(1, 0, 0)
+                        end
+                        if not isDead(v) and not v.Character.Head:FindFirstChild("dohmESPTag") then
+                            local dohmESPTag = Instance.new("BillboardGui", v.Character.Head)
+                            dohmESPTag.Name = "dohmESPTag"
+                            dohmESPTag.Size = UDim2.new(1, 200, 1, 30)
+                            dohmESPTag.Adornee = v.Character.Head
+                            dohmESPTag.AlwaysOnTop = true
+        
+                            local topTag = Instance.new("TextLabel", dohmESPTag)
+                            topTag.TextWrapped = true
+                            topTag.Text =
+                                (v.Name ..
+                                " | " ..
+                                    numberRound((currPlayer.Character.Head.Position - v.Character.Head.Position).Magnitude / 3) ..
+                                        "m" .. " | " .. getEquippedWeapon(v))
+                            topTag.Size = UDim2.new(1, 0, 1, 0)
+                            topTag.TextYAlignment = "Top"
+                            topTag.TextColor3 = Color3.new(1, 1, 1)
+                            topTag.BackgroundTransparency = 1
+                        else
+                            v.Character.Head.dohmESPTag.TextLabel.Text =
+                                (v.Name ..
+                                " | " ..
+                                    numberRound((currPlayer.Character.Head.Position - v.Character.Head.Position).Magnitude / 3) ..
+                                        "m" .. " | " .. getEquippedWeapon(v))
+                        end
+                    end
+                end
+            end
+        end
+        
+        RunService.Stepped:Connect(function()
+        doESP()
+        end
+        )
+    end
+}
+
+local Tab = GUI:Tab{
+	Name = "Misc/Others",
+	Icon = "rbxassetid://8569322835"
+}
+
+
+Tab:Button{
+	Name = "♾MAX HEIGHT♾",
+	Description = "gives you infinite jumping amount so bassicaly infinite jump",
+	Callback = function() 
+        loadstring(game:HttpGet("https://cdn.wearedevs.net/scripts/Infinite%20Jump.txt"))()
+    end
+}
+
+Tab:Button{
+	Name = "100% SPEEEED",
+	Description = "gives you infinite sprint speed but it doesnt show in ui also it auto does this so need to hold shift",
+	Callback = function() 
+        _G.t23 = true
+
+        while _G.t23 == true do
+        game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass"Humanoid".WalkSpeed = 35
+        wait()
+        end
+    end
+}
+
+Tab:Button{
+	Name = "JumbleHub",
+	Description = nil,
+	Callback = function() 
+        loadstring(game:HttpGet("https://jumblescripts.com/JumbleHub.lua"))()
+    end
+}
+
+Tab:Button{
+	Name = "Anti afk 1",
+	Description = nil,
+	Callback = function() 
+        loadstring(game:HttpGet("https://cdn.wearedevs.net/scripts/anti-afk%20via%20autofocus.txt"))()
+    end
+}
+
+Tab:Button{
+	Name = "😰Tp To FLAGS RISKY 😰",
+	Description = "Your Gonna Get kicked",
+	Callback = function() 
+        local currPlayer = game:GetService("Players").LocalPlayer
+        local flagIndex = 1
+        local flags = game.Workspace.Core.Flags:GetChildren()
+        
+        while true do
+            local playerCFrame = currPlayer.Character and currPlayer.Character:FindFirstChild("HumanoidRootPart") and currPlayer.Character.HumanoidRootPart.CFrame
+            if playerCFrame then
+                local flag = flags[flagIndex]
+                if flag and flag:IsA("Model") then
+                    local flagPosition = flag.PrimaryPart and flag.PrimaryPart.Position
+                    if flagPosition then
+                        local offset = flagPosition - playerCFrame.Position
+                        local newY = playerCFrame.Y + offset.Y
+                        local newCFrame = CFrame.new(playerCFrame.Position + offset, Vector3.new(playerCFrame.X, newY, playerCFrame.Z))
+                        currPlayer.Character:SetPrimaryPartCFrame(newCFrame)
+                    end
+                end
+                
+                flagIndex = flagIndex % #flags + 1 -- Move to the next flag in the list
+                
+                wait(5) -- Wait for 5 seconds before moving to the next flag
+            end
+            
+            wait() -- Adjust the wait time as needed
+        end
+        
+    end
+}
+
+local Tab = GUI:Tab{
+	Name = "🔫Weapons & ⚔Tools",
+	Icon = "rbxassetid://8569322835"
+}
+
+Tab:Button{
+	Name = "Afk autoFarm ( sniper )",
+	Description = "kills everyone Automaticly",
+	Callback = function()
+        local servPlayer = game:GetService("Players")
+        local currPlayer = game:GetService('Players').LocalPlayer
+        
+        function getEquippedWeapon(player)
+            local char = player.Character
+            local weapon = char and char:FindFirstChildWhichIsA("Tool")
+        
+            if weapon ~= nil then
+                return weapon.Name
+            else
+                return "Holstered"
+            end
+        end
+        
+        local currWeapon = getEquippedWeapon(currPlayer)
+        
+        for _, v in pairs(servPlayer:GetPlayers()) do
+            if v.Name ~= currPlayer.Name then
+                task.wait(1)
+        local args = {
+            [1] = game:GetService("Players").LocalPlayer.Character[currWeapon],
+            [2] = {
+                ["p"] = Vector3.new(127.24491882324219, 16.624034881591797, -84.08683776855469),
+                ["pid"] = 1,
+                ["part"] = v.Character.Head,
+                ["d"] = 80.71643829345703,
+                ["maxDist"] = 80.71429443359375,
+                ["h"] = v.Character.Humanoid,
+                ["m"] = Enum.Material.SmoothPlastic,
+                ["sid"] = 1,
+                ["t"] = 0.8510603182300679,
+                ["n"] = Vector3.new(-0.20354677736759186, -0.016248714178800583, 0.9789304733276367)
+            }
+        }
+        
+        if state == true then
+        game:GetService("ReplicatedStorage").WeaponsSystem.Network.WeaponHit:FireServer(unpack(args))
+        end
+        end
+        end
+    end
+}
+
+Tab:Button{
+	Name = "🎆🎃 🪀Trigger Bot🪀🎆🎃 ",
+	Description = "if someone is in front of you it shoots for you",
+	Callback = function() 
+        local currPlayer = game:GetService('Players').LocalPlayer
+    local servPlayer = game:GetService('Players')
+    local currPlayerCharacter = currPlayer.Character or currPlayer.CharacterAdded:wait()
+    local currMouse = currPlayer:GetMouse()
+    local currCamera = game:GetService("Workspace").CurrentCamera
+
+    local RunService = game:GetService("RunService")
+
+
+    function trigBot()
+        local ScreenPoint = currCamera:ScreenPointToRay(currMouse.X, currMouse.Y)
+        local Ray = Ray.new(ScreenPoint.Origin, ScreenPoint.Direction * 9999)
+        local Target, Position = workspace:FindPartOnRayWithIgnoreList(Ray, {currPlayerCharacter,workspace.CurrentCamera})
+        if Target and Position and servPlayer:GetPlayerFromCharacter(Target.Parent) and Target.Parent.Humanoid.Health > 0 or Target and Position and servPlayer:GetPlayerFromCharacter(Target.Parent.Parent) and Target.Parent.Parent.Humanoid.Health > 0 then
+            local currTarget = servPlayer:GetPlayerFromCharacter(Target.Parent) or servPlayer:GetPlayerFromCharacter(Target.Parent.Parent)
+            if currTarget.Team ~= currPlayer.Team and currTarget ~= currPlayer then
+                mouse1click()
+            end
+        end
+    end
+
+    RunService.Stepped:Connect(function()
+    trigBot()
+    end)
+
+    end
+}
+
+Tab:Button{
+	Name = "🎯Silent Aim🎯",
+	Description = "🎯Silent Aim🎯 Headshots only",
+	Callback = function() 
+        local currPlayer = game:GetService('Players').LocalPlayer
+        local servPlayer = game:GetService('Players')
+    
+        local RunService = game:GetService('RunService')
+        local servTeams = game:GetService("Teams")
+    
+        local currMouse = currPlayer:GetMouse()
+        local currCamera = game:GetService("Workspace").CurrentCamera
+    
+    
+        getgenv().GameSettings = {
+            SilentAim = {
+                ["active"] = true,
+                ["fov"] = 100,
+                ["hitpart"] = "Head",
+                ["circlevis"] = true,
+                ["wallbang"] = false,
+                ["circcolor"] = Color3.fromRGB(228, 9, 191)
+            }
+        }
+    
+    
+        local CircleInline = Drawing.new("Circle")
+        local CircleOutline = Drawing.new("Circle")
+        CircleInline.Radius = getgenv().GameSettings.SilentAim.fov
+        CircleInline.Thickness = 2
+        CircleInline.Position = Vector2.new(currCamera.ViewportSize.X / 2, currCamera.ViewportSize.Y / 2)
+        CircleInline.Transparency = 1
+        CircleInline.Color = getgenv().GameSettings.SilentAim.circcolor
+        CircleInline.Visible = getgenv().GameSettings.SilentAim.circlevis
+        CircleInline.ZIndex = 2
+        CircleOutline.Radius = getgenv().GameSettings.SilentAim.fov
+        CircleOutline.Thickness = 4
+        CircleOutline.Position = Vector2.new(currCamera.ViewportSize.X / 2, currCamera.ViewportSize.Y / 2)
+        CircleOutline.Transparency = 1
+        CircleOutline.Color = Color3.new()
+        CircleOutline.Visible = getgenv().GameSettings.SilentAim.circlevis
+        CircleOutline.ZIndex = 1
+    
+    
+        function isSameTeam(player)
+            if player.team ~= currPlayer.team and player.team ~= servTeams["Neutral"] then
+                return false
+            else
+                return true
+            end
+        end
+    
+        function isDead(player)
+            if
+                player == nil or player.Character == nil or player.Character:FindFirstChildWhichIsA("Humanoid") == nil or
+                    player.Character.Humanoid.Health <= 0
+            then
+                return true
+            else
+                return false
+            end
+        end
+    
+    
+            local function isClosestPlayer()
+                local target
+                local dist = math.huge
+                for _, v in next, servPlayer:GetPlayers() do
+                    if
+                        not isDead(v) and v ~= currPlayer and not isSameTeam(v) and v.Character:FindFirstChild("Head") and
+                            getgenv().GameSettings.SilentAim.active
+                    then
+                        local pos, visible = currCamera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
+                        local magnitude = (Vector2.new(currMouse.X, currMouse.Y) - Vector2.new(pos.X, pos.Y)).magnitude
+                        if magnitude < (getgenv().GameSettings.SilentAim.fov) then
+                            if magnitude < dist then
+                                if getgenv().GameSettings.SilentAim.wallbang then
+                                    target = v
+                                    dist = magnitude
+                                else
+                                    if visible then
+                                        target = v
+                                        dist = magnitude
+                                end
+                            end
+        
+        
+                            end
+                        end
+                    end
+                end
+                return target
+            end
+        
+        
+            local target
+            local gmt = getrawmetatable(game)
+            setreadonly(gmt, false)
+            local oldNamecall = gmt.__namecall
+        
+            gmt.__namecall =
+                newcclosure(
+                function(self, ...)
+                    local Args = {...}
+                    local method = getnamecallmethod()
+                    if tostring(self) == "WeaponHit" and tostring(method) == "FireServer" then
+                        target = isClosestPlayer()
+                        if target then
+                            Args[2]["part"] = target.Character[getgenv().GameSettings.SilentAim.hitpart]
+                            return self.FireServer(self, unpack(Args))
+                        end
+                    end
+                    return oldNamecall(self, ...)
+                end
+            )
+    end
+}
+
+
+
+
+Tab:Button{
+	Name = "🎯Silent Aim ( HUGE FOV )",
+	Description = "Headshots only",
+	Callback = function() 
+        local currPlayer = game:GetService('Players').LocalPlayer
+        local servPlayer = game:GetService('Players')
+    
+        local RunService = game:GetService('RunService')
+        local servTeams = game:GetService("Teams")
+    
+        local currMouse = currPlayer:GetMouse()
+        local currCamera = game:GetService("Workspace").CurrentCamera
+    
+    
+        getgenv().GameSettings = {
+            SilentAim = {
+                ["active"] = true,
+                ["fov"] = 210,
+                ["hitpart"] = "Head",
+                ["circlevis"] = true,
+                ["wallbang"] = false,
+                ["circcolor"] = Color3.fromRGB(228, 9, 191)
+            }
+        }
+    
+    
+        local CircleInline = Drawing.new("Circle")
+        local CircleOutline = Drawing.new("Circle")
+        CircleInline.Radius = getgenv().GameSettings.SilentAim.fov
+        CircleInline.Thickness = 2
+        CircleInline.Position = Vector2.new(currCamera.ViewportSize.X / 2, currCamera.ViewportSize.Y / 2)
+        CircleInline.Transparency = 1
+        CircleInline.Color = getgenv().GameSettings.SilentAim.circcolor
+        CircleInline.Visible = getgenv().GameSettings.SilentAim.circlevis
+        CircleInline.ZIndex = 2
+        CircleOutline.Radius = getgenv().GameSettings.SilentAim.fov
+        CircleOutline.Thickness = 4
+        CircleOutline.Position = Vector2.new(currCamera.ViewportSize.X / 2, currCamera.ViewportSize.Y / 2)
+        CircleOutline.Transparency = 1
+        CircleOutline.Color = Color3.new()
+        CircleOutline.Visible = getgenv().GameSettings.SilentAim.circlevis
+        CircleOutline.ZIndex = 1
+    
+    
+        function isSameTeam(player)
+            if player.team ~= currPlayer.team and player.team ~= servTeams["Neutral"] then
+                return false
+            else
+                return true
+            end
+        end
+    
+        function isDead(player)
+            if
+                player == nil or player.Character == nil or player.Character:FindFirstChildWhichIsA("Humanoid") == nil or
+                    player.Character.Humanoid.Health <= 0
+            then
+                return true
+            else
+                return false
+            end
+        end
+    
+    
+            local function isClosestPlayer()
+                local target
+                local dist = math.huge
+                for _, v in next, servPlayer:GetPlayers() do
+                    if
+                        not isDead(v) and v ~= currPlayer and not isSameTeam(v) and v.Character:FindFirstChild("Head") and
+                            getgenv().GameSettings.SilentAim.active
+                    then
+                        local pos, visible = currCamera:WorldToScreenPoint(v.Character.HumanoidRootPart.Position)
+                        local magnitude = (Vector2.new(currMouse.X, currMouse.Y) - Vector2.new(pos.X, pos.Y)).magnitude
+                        if magnitude < (getgenv().GameSettings.SilentAim.fov) then
+                            if magnitude < dist then
+                                if getgenv().GameSettings.SilentAim.wallbang then
+                                    target = v
+                                    dist = magnitude
+                                else
+                                    if visible then
+                                        target = v
+                                        dist = magnitude
+                                end
+                            end
+        
+        
+                            end
+                        end
+                    end
+                end
+                return target
+            end
+        
+        
+            local target
+            local gmt = getrawmetatable(game)
+            setreadonly(gmt, false)
+            local oldNamecall = gmt.__namecall
+        
+            gmt.__namecall =
+                newcclosure(
+                function(self, ...)
+                    local Args = {...}
+                    local method = getnamecallmethod()
+                    if tostring(self) == "WeaponHit" and tostring(method) == "FireServer" then
+                        target = isClosestPlayer()
+                        if target then
+                            Args[2]["part"] = target.Character[getgenv().GameSettings.SilentAim.hitpart]
+                            return self.FireServer(self, unpack(Args))
+                        end
+                    end
+                    return oldNamecall(self, ...)
+                end
+            )
+    end
+}
+
+Tab:Button{
+	Name = "Bring All",
+	Description = "Brings all Players to you",
+	Callback = function() 
+    Tab:Button{
+	Name = "Button",
+	Description = nil,
+	Callback = function() end
+}local currPlayer = game:GetService("Players").LocalPlayer
+local servPlayer = game:GetService("Players")
+
+local teams = game:GetService("Teams")
+
+function isSameTeam(player)
+    if player.team ~= currPlayer.team and player.team ~= teams["Neutral"] then
+        return false
+    else
+        return true
+    end
+end
+
+while task.wait() do
+for _, v in next, servPlayer:GetPlayers() do
+    if v ~= currPlayer and not isSameTeam(v) then
+        print(v)
+        v.Character.HumanoidRootPart.CFrame = currPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(2.2,0.5,-6)
+    end
+end
+end
+    end
+}
+
+Tab:Button{
+	Name = "Hitbox Expander",
+	Description = "It Makes enemies Hitbox bigger",
+	Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/RobloxScripts/main/HitboxExpander.lua"))()
+    end
+}
+
+Tab:Button{
+	Name = "🎆🎃 Hitbox Expander 2🎆🎃 ",
+	Description = nil,
+	Callback = function() 
+        local currPlayer = game:GetService("Players").LocalPlayer
+    local servPlayer = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local currTeams = game:GetService("Teams")
+    
+    getgenv().Hitbox = {
+        Settings = {
+            ['hitpart'] = 'Head',
+            ['hitsize'] = 5,
+            ['transparency'] = 0.60,
+            ['color'] =  BrickColor.new("Really blue")
+        }
+    }
+    
+    function isSameTeam(currTarget)
+        if currTarget.team ~= currPlayer.team and currTarget.team ~= currTeams["Neutral"] then
+            return false
+        else
+            return true
+        end
+    end
+    
+    function isDead(currTarget)
+        if
+            currTarget == nil or currTarget.Character == nil or
+                currTarget.Character:FindFirstChildWhichIsA("Humanoid") == nil or
+                currTarget.Character.Humanoid.Health <= 0
+         then
+            return true
+        else
+            return false
+        end
+    end
+    
+    RunService.Stepped:Connect(function()
+    for _, v in next, servPlayer:GetPlayers() do
+        if v ~= currPlayer and not isSameTeam(v) and not isDead(v) then
+    
+    
+           
+                    v.Character[getgenv().Hitbox.Settings.hitpart].Size = Vector3.new(getgenv().Hitbox.Settings.hitsize, getgenv().Hitbox.Settings.hitsize, getgenv().Hitbox.Settings.hitsize)
+                    v.Character[getgenv().Hitbox.Settings.hitpart].Transparency = getgenv().Hitbox.Settings.transparency
+                    v.Character[getgenv().Hitbox.Settings.hitpart].BrickColor = BrickColor.new("Really blue")
+                    v.Character[getgenv().Hitbox.Settings.hitpart].Material = "Neon"
+                    v.Character[getgenv().Hitbox.Settings.hitpart].CanCollide = false
+        end
+    end
+    end)
+    end
+}
+
+Tab:Button{
+	Name = "Everything else",
+	Description = nil,
+	Callback = function() 
+    
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["HeadshotDamage"] = 423,
+            ["HeadshotCooldown"] = 0,
+        }
+        
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+Tab:Button{
+	Name = "Anti Recoil",
+	Description = "Recoil is when you shoot your gunj it goes up down left or right this DESTROYS THAT",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["RecoilMax"] = 0,
+            ["RecoilMin"] = 0,
+            ["TotalRecoilMax"] = 0,
+            ["RecoilDecay"] = 0,
+        }
+        
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+Tab:Button{
+	Name = "‱SHOVEL 💨SPEED💨⁜",
+	Description = "if you dont know what this does your fucking dumb",
+	Callback = function() 
+        
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+        ["Cooldown"] = 0,
+        ["Value"] = 0,
+        ["SwingCooldown"] = 0,
+        ["HitRate"] = 0,
+
+    }
+        
+    mt.__index = function(a,b)
+        if Mods[tostring(a)] then
+            if tostring(b) == "Value" then
+                return Mods[tostring(a)]
+            end
+        end
+        return index(a,b)
+    end
+    
+end
+}
+
+Tab:Button{
+	Name = "🌀SHOVEL 💥?MAX DAMAGE?💥",
+	Description = "Multiples your damage by 3x",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+    ["Value"] = 0,
+    ["DirtDamage"] = 9e9,
+    ["HitRate"] = 0,
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+Tab:Button{
+	Name = "Every tool mod",
+	Description = "Turns on Every tool mod",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["Cooldown"] = 0,
+            ["Value"] = 0,
+            ["DirtDamage"] = 9e9,
+            ["SwingCooldown"] = 0,
+            ["HitRate"] = 0,
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+
+Tab:Button{
+	Name = "Every gun mod",
+	Description = "Turns on Every gun mod",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["RecoilMax"] = 0,
+            ["RecoilMin"] = 0,
+            ["MuzzleFlashSize0"] = 0,
+            ["MuzzleFlashSize1"] = 0,
+            ["FlashBrightness"] = 0,
+            ["AmmoCapacity"] = 9e9,
+            ["ShotCooldown"] = 0,
+            ["CurrentAmmo"] = 9e9,
+            ["BulletSpeed"] = 9e9,
+            ["FireMode"] = "Automatic",
+            ["GravityFactor"] = 0,
+            ["MaxSpread"] = 0,
+            ["MinSpread"] = 0,
+            ["HitDamage"] = 9e9,
+            ["NumProjectiles"] = 1,
+            ["HeadshotDamage"] = 9e9,
+            ["HeadshotCooldown"] = 0,
+            ["TotalRecoilMax"] = 0,
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+Tab:Button{
+	Name = "Every gun and tool mod",
+	Description = "Makes you shoot faster by 0.6x",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["RecoilMax"] = 0,
+            ["RecoilMin"] = 0,
+            ["MuzzleFlashSize0"] = 0,
+            ["MuzzleFlashSize1"] = 0,
+            ["FlashBrightness"] = 0,
+            ["AmmoCapacity"] = 9e9,
+            ["ShotCooldown"] = 0,
+            ["CurrentAmmo"] = 9e9,
+            ["BulletSpeed"] = 9e9,
+            ["FireMode"] = "Automatic",
+            ["GravityFactor"] = 0,
+            ["MaxSpread"] = 0,
+            ["MinSpread"] = 0,
+            ["HitDamage"] = 9e9,
+            ["NumProjectiles"] = 1,
+            ["HeadshotDamage"] = 9e9,
+            ["HeadshotCooldown"] = 0,
+            ["TotalRecoilMax"] = 0,
+            ["Cooldown"] = 0,
+            ["Value"] = 0,
+            ["DirtDamage"] = 9e9,
+            ["SwingCooldown"] = 0,
+            ["HitRate"] = 0,
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+
+Tab:Button{
+	Name = "🎆🎃 ⌛⏲Faster Shootin⏲⌛",
+	Description = "Makes you shoot faster by 0.6x",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["ShotCooldown"] = 0.1,
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+
+Tab:Button{
+	Name = "⌛⏲No shot Cooldown⏲⌛",
+	Description = "Makes you shoot faster by 500Tx",
+	Callback = function() 
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["ShotCooldown"] = 0,
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+Tab:Button{
+	Name = "Sword Speed",
+	Description = nil,
+	Callback = function()
+        local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            ["Cooldown"] = 0
+        }
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        
+    end
+}
+
+
+Tab:Button{
+	Name = "🎆🎃 5% Ammo",
+	Description = "It gives 5.5K To your guns and + No Reload",
+	Callback = function()  local mt = getrawmetatable(game)
+        setreadonly(mt, false)
+        local index = mt.__index
+        
+        local Mods = {
+            
+            ["AmmoCapacity"] = 5555,
+            ["CurrentAmmo"] = 5555,
+        }
+        
+        mt.__index = function(a,b)
+            if Mods[tostring(a)] then
+                if tostring(b) == "Value" then
+                    return Mods[tostring(a)]
+                end
+            end
+            return index(a,b)
+        end
+        end
+    
+    }
+
+    GUI:Notification{
+        Title = "BEEEEEEEEP! BEEEEEEEEEEEP!",
+        Text = "ALMIGHTY PUSH",
+        Duration = 3,
+        Callback = function() end
+    }
+
+    GUI:Credit{
+        Name = "CHOPPER",
+        Description = "Made the script",
+        Discord = "golddeathninja02#9264"
+    }
