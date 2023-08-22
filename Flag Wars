@@ -259,6 +259,14 @@ Tab:Button{
 }
 
 Tab:Button{
+	Name = "Chest Drop Esp",
+	Description = "Headshots only",
+	Callback = function() 
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Golddeathninja03/dawdwdaw/main/aCADestt'))()
+    end
+}
+
+Tab:Button{
 	Name = "Yacht Drop Esp",
 	Description = "Esp-For-Yacht-Drop",
 	Callback = function() 
